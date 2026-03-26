@@ -1,0 +1,21 @@
+{
+  "feature": "",
+  "defects": [
+    {
+      "id": "DEF-001",
+      "title": "",
+      "severity": "medium",
+      "classification": "implementation bug",
+      "scenario_ids": [],
+      "status": "open",
+      "fix_status": "not_started",
+      "introduced_by": "",
+      "owner": "",
+      "last_updated_at": "",
+      "retest_status": "not_run",
+      "regression_status": "not_run",
+      "evidence": [],
+      "notes": []
+    }
+  ]
+}

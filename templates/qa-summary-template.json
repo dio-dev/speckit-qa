@@ -1,0 +1,19 @@
+{
+  "feature": "",
+  "overall_status": "blocked",
+  "scenario_counts": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0,
+    "blocked": 0
+  },
+  "defect_counts": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "release_recommendation": "retest required after fixes",
+  "major_risks": [],
+  "notes": []
+}

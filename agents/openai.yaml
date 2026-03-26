@@ -1,0 +1,4 @@
+interface:
+  display_name: "Speckit QA"
+  short_description: "Run structured QA phases for Spec-Driven Development"
+  default_prompt: "Use the Speckit QA skill to inspect spec artifacts, identify blockers, design browser scenarios, execute evidence-based QA, and produce a merge or release readiness report."

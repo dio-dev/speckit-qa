@@ -1,0 +1,15 @@
+{
+  "feature": "",
+  "scenarios": [
+    {
+      "id": "SCN-001",
+      "title": "",
+      "status": "pending",
+      "automatable_now": false,
+      "blocked_reason": "",
+      "last_run_at": "",
+      "evidence": [],
+      "defects": []
+    }
+  ]
+}
