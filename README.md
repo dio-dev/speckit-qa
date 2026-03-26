@@ -2,11 +2,17 @@
 
 Structured QA orchestration for Spec-Driven Development workflows.
 
-This repository packages the `speckit-qa` skill as a standalone, installable unit. It is intended for AI coding environments that support skill folders with a top-level `SKILL.md` plus supporting prompts, templates, and slash commands.
+This repository packages the `speckit-qa` workflow so it can be installed in multiple AI coding environments:
+
+- Codex as a skill
+- Claude Code as a skill
+- Cursor as a project rule plus local support files
+- Kiro as a steering file plus local support files
+- Other `AGENTS.md`-style tools through a managed `AGENTS.md` block
 
 ## What It Does
 
-The skill adds a disciplined QA workflow on top of specs and implementation plans:
+The workflow adds a disciplined QA layer on top of specs and implementation plans:
 
 - `qa.init` for readiness analysis and blocker discovery
 - `qa.scenarios` for executable scenario design
@@ -17,64 +23,140 @@ The skill adds a disciplined QA workflow on top of specs and implementation plan
 
 ## Repository Layout
 
-- `SKILL.md`: primary skill instructions
+- `SKILL.md`: primary workflow instructions
 - `agents/`: agent metadata
 - `prompts/`: phase-specific prompt fragments
 - `slash-commands/`: command entrypoints for the workflow
 - `templates/`: reusable QA artifact templates
+- `scripts/install.ps1`: Windows installer
+- `scripts/install.sh`: macOS and Linux installer
 
 ## Install
 
-### Option 1: clone directly into your skills directory
-
-Clone this repository into your Codex skills directory as `speckit-qa`.
-
-Typical target:
-
-```text
-.codex/skills/speckit-qa/
-```
-
-The final layout should look like:
-
-```text
-speckit-qa/
-  SKILL.md
-  agents/
-  prompts/
-  slash-commands/
-  templates/
-```
-
-### Option 2: clone anywhere, then run the installer
+### Quick Commands
 
 PowerShell:
 
 ```powershell
-.\scripts\install.ps1
+.\scripts\install.ps1 codex
+.\scripts\install.ps1 -Tool claude
+.\scripts\install.ps1 -Tool cursor -ProjectRoot C:\path\to\repo
+.\scripts\install.ps1 -Tool kiro -ProjectRoot C:\path\to\repo
+.\scripts\install.ps1 -Tool agents -ProjectRoot C:\path\to\repo
 ```
 
 Bash:
 
 ```bash
-./scripts/install.sh
+./scripts/install.sh codex
+./scripts/install.sh claude
+./scripts/install.sh cursor --project-root /path/to/repo
+./scripts/install.sh kiro --project-root /path/to/repo
+./scripts/install.sh agents --project-root /path/to/repo
 ```
 
-Both installers copy only the runtime skill files into:
+### Tool Targets
 
-```text
-$HOME/.codex/skills/speckit-qa
-```
+#### Codex
 
-If `CODEX_HOME` is set, they install into:
+Default install target:
 
 ```text
 $CODEX_HOME/skills/speckit-qa
 ```
 
+If `CODEX_HOME` is not set:
+
+```text
+$HOME/.codex/skills/speckit-qa
+```
+
+#### Claude Code
+
+User install target:
+
+```text
+~/.claude/skills/speckit-qa
+```
+
+Project install target:
+
+```text
+<repo>/.claude/skills/speckit-qa
+```
+
+Example:
+
+```powershell
+.\scripts\install.ps1 -Tool claude -Scope project -ProjectRoot C:\path\to\repo
+```
+
+```bash
+./scripts/install.sh claude --scope project --project-root /path/to/repo
+```
+
+#### Cursor
+
+The installer creates:
+
+- `<repo>/.speckit/skills/speckit-qa/`
+- `<repo>/.cursor/rules/speckit-qa.mdc`
+
+The rule points Cursor at the packaged workflow files inside `.speckit/skills/speckit-qa/`.
+
+#### Kiro
+
+The installer creates:
+
+- `<repo>/.speckit/skills/speckit-qa/`
+- `<repo>/.kiro/steering/speckit-qa.md`
+
+The steering file points Kiro at the packaged workflow files inside `.speckit/skills/speckit-qa/`.
+
+#### Other AGENTS.md Tools
+
+The installer creates:
+
+- `<repo>/.speckit/skills/speckit-qa/`
+- a managed block inside `<repo>/AGENTS.md`
+
+The managed block is wrapped with:
+
+```text
+<!-- speckit-qa:start -->
+<!-- speckit-qa:end -->
+```
+
+Re-running the installer updates only that block.
+
+### Advanced Options
+
+PowerShell:
+
+```powershell
+.\scripts\install.ps1 -Tool cursor -ProjectRoot C:\path\to\repo
+.\scripts\install.ps1 -Tool claude -Scope user
+.\scripts\install.ps1 -Tool codex -DestinationRoot D:\custom\skills
+```
+
+Bash:
+
+```bash
+./scripts/install.sh cursor --project-root /path/to/repo
+./scripts/install.sh claude --scope user
+./scripts/install.sh codex --destination-root /custom/skills
+```
+
+Parameters:
+
+- `Tool`: `codex`, `claude`, `cursor`, `kiro`, or `agents`
+- `Scope`: `user` or `project`
+- `ProjectRoot`: target repository for project-scoped installs
+- `DestinationRoot`: override the default install root
+
 ## Usage
 
-Reference the skill by name when working on a feature that already has specs and implementation artifacts.
+Reference the workflow by name when working on a feature that already has specs and implementation artifacts.
 
 Example prompts:
 
@@ -82,11 +164,11 @@ Example prompts:
 - `Run qa.scenarios for the current spec and implementation plan.`
 - `Use speckit-qa and execute qa.report from the existing QA artifacts.`
 
-You can also wire the slash commands into your local workflow if your environment supports command-style skill triggers.
+For Cursor, Kiro, and `AGENTS.md`-based tools, ask for Speckit QA explicitly if the tool does not auto-attach the installed guidance.
 
 ## Expected Project Artifacts
 
-The skill works best when the target repository already contains some of the following:
+The workflow works best when the target repository already contains some of the following:
 
 - `specs/`
 - `.specify/`
@@ -98,7 +180,7 @@ The skill works best when the target repository already contains some of the fol
 
 ## Notes
 
-- The skill is intentionally evidence-driven and does not treat unverified flows as passing.
+- The workflow is intentionally evidence-driven and does not treat unverified flows as passing.
 - Browser execution assumes the host environment provides the needed browser automation capability.
-- The installer scripts copy `SKILL.md`, `agents/`, `prompts/`, `slash-commands/`, and `templates/`.
-- No runtime dependencies are required for the skill itself.
+- The installers copy only `SKILL.md`, `agents/`, `prompts/`, `slash-commands/`, and `templates/`.
+- No runtime dependencies are required for the workflow itself.
